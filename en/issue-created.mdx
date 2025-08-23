@@ -1,0 +1,193 @@
+# Create issue
+
+<ServeMode value={['saas', 'standalone']} />
+
+## Requirements
+
+| ONES              |
+| :---------------- |
+| v6.1.98+,v6.12.0+ |
+
+## Payload
+
+[Common structure](../../events.mdx#event-message)
+
+**EventData**
+
+| Field              | Type                    | Description                                   |
+| ------------------ | ----------------------- | --------------------------------------------- |
+| `issueID`          | string                  | ID of the issue associated with the event.    |
+| `statusID`         | string                  | Status ID of work item.                       |
+| `scopeID`          | string                  | Scope ID of work item.                        |
+| `basicInfoChanges` | BasicInfoChanges        | Change of basic information of work item.     |
+| `properties`       | `Map<string, Property>` | Change of work item attributes.               |
+| `relations`        | `Map<string, Relation>` | Change of associated attributes of work item. |
+
+**BasicInfoChanges**
+
+| Field        | Type       | Description                        |
+| ------------ | ---------- | ---------------------------------- |
+| `creator`    | Creator    | Change of work item creator.       |
+| `assignee`   | Assignee   | Change of work item assignee.      |
+| `createTime` | CreateTime | Change of work item creation time. |
+
+**Creator**
+
+| Field    | Type   | Description          |
+| -------- | ------ | -------------------- |
+| `fromID` | string | Original creator ID. |
+| `toID`   | string | New creator ID.      |
+
+**Assignee**
+
+| Field    | Type   | Description           |
+| -------- | ------ | --------------------- |
+| `fromID` | string | Original assignee ID. |
+| `toID`   | string | New assignee ID.      |
+
+**CreateTime**
+
+| Field      | Type   | Description             |
+| ---------- | ------ | ----------------------- |
+| `fromTime` | number | Original creation time. |
+| `toTime`   | number | New creation time.      |
+
+**Property**
+
+| Field          | Type          | Description            |
+| -------------- | ------------- | ---------------------- |
+| `issueID`      | string        | Issue ID.              |
+| `fieldID`      | string        | Issue field ID.        |
+| `propertyType` | number        | Issue field type.      |
+| `oldValue`     | PropertyValue | Issue field old value. |
+| `newValue`     | PropertyValue | Issue field new value. |
+
+**PropertyValue**
+
+| Field         | Type        | Description    |
+| ------------- | ----------- | -------------- |
+| `stringValue` | string      | String value.  |
+| `numberValue` | number      | Numeric value. |
+| `entityValue` | EntityRef   | Entity value.  |
+| `entityArray` | EntityRef[] | Entity array.  |
+
+**EntityRef**
+
+| Field  | Type   | Description  |
+| ------ | ------ | ------------ |
+| `id`   | string | Entity ID.   |
+| `name` | string | Entity name. |
+
+**Relation**
+
+| Field          | Type        | Description                                        |
+| -------------- | ----------- | -------------------------------------------------- |
+| `issueID`      | string      | Issue ID.                                          |
+| `fieldID`      | string      | Entity ID associated with the issue.               |
+| `relationType` | number      | Relation type with issue.                          |
+| `origins`      | EntityRef[] | Entity information of the original association.    |
+| `additions`    | EntityRef[] | Entity information of the newly added association. |
+| `deletions`    | EntityRef[] | Entity information of the deleted association.     |
+
+**property type enumerated value**
+
+| Field  | Type        | Description                             |
+| ------ | ----------- | --------------------------------------- |
+| `1`    | stringValue | Issue title.                            |
+| `2`    | numberValue | Integer.                                |
+| `3`    | stringValue | Multi-line Text.                        |
+| `4`    | stringValue | Single-line Text.                       |
+| `5`    | numberValue | Time.                                   |
+| `6`    | stringValue | Date.                                   |
+| `7`    | numberValue | Float.                                  |
+| `9`    | stringValue | Issue Description.                      |
+| `10`   | stringValue | Rich text issue description             |
+| `33`   | numberValue | Issue progress.                         |
+| `1001` | entityValue | Issue single option script property.    |
+| `1002` | entityArray | Issue multiple options script property. |
+| `1011` | stringValue | Single option sprint.                   |
+| `1012` | stringValue | Due Date for issue.                     |
+| `1013` | stringValue | Planned Start Date for issue.           |
+| `1014` | stringValue | Planned Completion Date for issue.      |
+
+**relation type enumerated value**
+
+| Field | Description                    |
+| ----- | ------------------------------ |
+| `1`   | Single option.                 |
+| `3`   | Relation issue.                |
+| `5`   | Priority.                      |
+| `7`   | Sprint it belongs to.          |
+| `13`  | Multiple options menu.         |
+| `20`  | Single option member.          |
+| `21`  | Multiple options member.       |
+| `37`  | Relation release.              |
+| `44`  | Product it belongs to.         |
+| `46`  | Function module it belongs to. |
+| `47`  | Issue Attachment               |
+| `48`  | Relation wiki page.            |
+| `49`  | Relation testCase.             |
+| `50`  | Relation execution result.     |
+| `51`  | Relation testcase plan.        |
+| `101` | Watcher.                       |
+| `107` | Multiple options project.      |
+| `108` | Multiple options department.   |
+
+## Example
+
+```json
+{
+  "data": {
+    "eventID": "1892128242472751104",
+    "eventType": "ones:project:issue:created",
+    "timestamp": 1739953501699,
+    "eventContext": {
+      "organizationID": "XHvsNMLz",
+      "teamID": "7rg7Mxqn",
+      "triggerUserID": "TvNFWpjA"
+    },
+    "eventSubscriber": {
+      "subscriberID": "3DCtiyvs",
+      "clientID": "ldsRC9ov"
+    },
+    "eventData": {
+      "basicInfoChanges": {
+        "assignee": { "fromID": "", "toID": "TvNFWpjA" },
+        "createTime": { "fromTime": 0, "toTime": 1739953501671 },
+        "creator": { "fromID": "", "toID": "TvNFWpjA" }
+      },
+      "issueID": "TvNFWpjACkNb6wm1",
+      "properties": {
+        "field001": {
+          "fieldID": "field001",
+          "issueID": "TvNFWpjACkNb6wm1",
+          "newValue": { "stringValue": "issue title" },
+          "oldValue": { "stringValue": "" },
+          "propertyType": 1
+        }
+      },
+      "relations": {
+        "field008": {
+          "additions": [{ "id": "TvNFWpjA", "name": "blue" }],
+          "fieldID": "field008",
+          "issueID": "TvNFWpjACkNb6wm1",
+          "relationType": 101
+        },
+        "field011": {
+          "fieldID": "field011",
+          "issueID": "TvNFWpjACkNb6wm1",
+          "relationType": 7
+        },
+        "field012": {
+          "additions": [{ "id": "9HpAHvkx", "name": "High" }],
+          "fieldID": "field012",
+          "issueID": "TvNFWpjACkNb6wm1",
+          "relationType": 5
+        }
+      },
+      "scopeID": "QDNyMVNK",
+      "statusID": "Bh2hda9J"
+    }
+  }
+}
+```

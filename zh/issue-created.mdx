@@ -1,0 +1,193 @@
+# 创建工作项
+
+<ServeMode value={['saas', 'standalone']} />
+
+## 要求
+
+| ONES              |
+| :---------------- |
+| v6.1.98+,v6.12.0+ |
+
+## Payload
+
+[通用结构](../../events.mdx#事件消息)
+
+**EventData**
+
+| 字段               | 类型                    | 描述               |
+| ------------------ | ----------------------- | ------------------ |
+| `issueID`          | string                  | 事件关联的工作项ID |
+| `statusID`         | string                  | 工作项状态ID       |
+| `scopeID`          | string                  | 工作项Scope ID     |
+| `basicInfoChanges` | BasicInfoChanges        | 工作项基础信息变更 |
+| `properties`       | `Map<string, Property>` | 工作项属性变更     |
+| `relations`        | `Map<string, Relation>` | 工作项关联属性变更 |
+
+**BasicInfoChanges**
+
+| 字段         | 类型       | 描述               |
+| ------------ | ---------- | ------------------ |
+| `creator`    | Creator    | 工作项创建者变更   |
+| `assignee`   | Assignee   | 工作项负责人变更   |
+| `createTime` | CreateTime | 工作项创建时间变更 |
+
+**Creator**
+
+| 字段     | 类型   | 描述         |
+| -------- | ------ | ------------ |
+| `fromID` | string | 原始创建者ID |
+| `toID`   | string | 新创建者ID   |
+
+**Assignee**
+
+| 字段     | 类型   | 描述         |
+| -------- | ------ | ------------ |
+| `fromID` | string | 原始负责人ID |
+| `toID`   | string | 新负责人ID   |
+
+**CreateTime**
+
+| 字段       | 类型   | 描述         |
+| ---------- | ------ | ------------ |
+| `fromTime` | number | 原始创建时间 |
+| `toTime`   | number | 新创建时间   |
+
+**Property**
+
+| 字段           | 类型          | 描述           |
+| -------------- | ------------- | -------------- |
+| `issueID`      | string        | 工作项ID       |
+| `fieldID`      | string        | 工作项属性ID   |
+| `propertyType` | number        | 工作项属性类型 |
+| `oldValue`     | PropertyValue | 工作项属性旧值 |
+| `newValue`     | PropertyValue | 工作项属性旧值 |
+
+**PropertyValue**
+
+| 字段          | 类型        | 描述     |
+| ------------- | ----------- | -------- |
+| `stringValue` | string      | 字符串值 |
+| `numberValue` | number      | 数值     |
+| `entityValue` | EntityRef   | 实体值   |
+| `entityArray` | EntityRef[] | 实体数组 |
+
+**EntityRef**
+
+| 字段   | 类型   | 描述     |
+| ------ | ------ | -------- |
+| `id`   | string | 实体ID   |
+| `name` | string | 实体名称 |
+
+**Relation**
+
+| 字段           | 类型        | 描述               |
+| -------------- | ----------- | ------------------ |
+| `issueID`      | string      | 工作项ID           |
+| `fieldID`      | string      | 工作项关联的实体ID |
+| `relationType` | number      | 关联类型           |
+| `origins`      | EntityRef[] | 原始关联的实体信息 |
+| `additions`    | EntityRef[] | 新增关联的实体信息 |
+| `deletions`    | EntityRef[] | 删除关联的实体信息 |
+
+**propertyType枚举值**
+
+| 字段   | 类型        | 描述               |
+| ------ | ----------- | ------------------ |
+| `1`    | stringValue | 工作项标题         |
+| `2`    | numberValue | 整数               |
+| `3`    | stringValue | 多行文本           |
+| `4`    | stringValue | 单行文本           |
+| `5`    | numberValue | 时间               |
+| `6`    | stringValue | 日期               |
+| `7`    | numberValue | 浮点数             |
+| `9`    | stringValue | 工作项描述         |
+| `10`   | stringValue | 工作项描述富文本   |
+| `33`   | numberValue | 工作项进度         |
+| `1001` | entityValue | 工作项单选脚本属性 |
+| `1002` | entityArray | 工作项多选脚本属性 |
+| `1011` | stringValue | 单选迭代           |
+| `1012` | stringValue | 工作项截止日期     |
+| `1013` | stringValue | 工作项计划开始日期 |
+| `1014` | stringValue | 工作项计划完成日期 |
+
+**relationType枚举值**
+
+| 字段  | 描述         |
+| ----- | ------------ |
+| `1`   | 单选菜单     |
+| `3`   | 关联工作项   |
+| `5`   | 优先级       |
+| `7`   | 所属迭代     |
+| `13`  | 多选菜单     |
+| `20`  | 单选成员     |
+| `21`  | 多选成员     |
+| `37`  | 关联发布     |
+| `44`  | 所属产品     |
+| `46`  | 所属功能模块 |
+| `47`  | 工作项附件   |
+| `48`  | 关联wiki页面 |
+| `49`  | 关联测试用例 |
+| `50`  | 关联执行结果 |
+| `51`  | 关联测试计划 |
+| `101` | 关注者       |
+| `107` | 多选项目     |
+| `108` | 多选部门     |
+
+## 示例
+
+```json
+{
+  "data": {
+    "eventID": "1892128242472751104",
+    "eventType": "ones:project:issue:created",
+    "timestamp": 1739953501699,
+    "eventContext": {
+      "organizationID": "XHvsNMLz",
+      "teamID": "7rg7Mxqn",
+      "triggerUserID": "TvNFWpjA"
+    },
+    "eventSubscriber": {
+      "subscriberID": "3DCtiyvs",
+      "clientID": "ldsRC9ov"
+    },
+    "eventData": {
+      "basicInfoChanges": {
+        "assignee": { "fromID": "", "toID": "TvNFWpjA" },
+        "createTime": { "fromTime": 0, "toTime": 1739953501671 },
+        "creator": { "fromID": "", "toID": "TvNFWpjA" }
+      },
+      "issueID": "TvNFWpjACkNb6wm1",
+      "properties": {
+        "field001": {
+          "fieldID": "field001",
+          "issueID": "TvNFWpjACkNb6wm1",
+          "newValue": { "stringValue": "工作项标题" },
+          "oldValue": { "stringValue": "" },
+          "propertyType": 1
+        }
+      },
+      "relations": {
+        "field008": {
+          "additions": [{ "id": "TvNFWpjA", "name": "blue" }],
+          "fieldID": "field008",
+          "issueID": "TvNFWpjACkNb6wm1",
+          "relationType": 101
+        },
+        "field011": {
+          "fieldID": "field011",
+          "issueID": "TvNFWpjACkNb6wm1",
+          "relationType": 7
+        },
+        "field012": {
+          "additions": [{ "id": "9HpAHvkx", "name": "较高" }],
+          "fieldID": "field012",
+          "issueID": "TvNFWpjACkNb6wm1",
+          "relationType": 5
+        }
+      },
+      "scopeID": "QDNyMVNK",
+      "statusID": "Bh2hda9J"
+    }
+  }
+}
+```
